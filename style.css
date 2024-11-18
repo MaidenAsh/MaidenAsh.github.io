@@ -2,16 +2,23 @@ h1, h2 {
   text-align: center;
 }
 body {
-    background-color: turquoise;
+    background-color: #625acd;
 }
-p {
+h1, h2, p {
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+}
+.intro {
+  
 }
 
 .p1 {
   margin-left:auto;
   margin-right:auto;
   text-align: center; 
+  background-color: #756dd6; 
+  border: black;
+  border-width: thick;
 }
 
 .img1 {
@@ -22,6 +29,9 @@ p {
 }
 
 /*
+below is trying to get the gif and the text on the same line
+keep running into alignment issue, text aligned to bottom of
+gif instead of top
 .p1 {
   background-color: red;
   text-align: left;
