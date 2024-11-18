@@ -8,17 +8,14 @@ h1, h2, p {
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 
 }
-.intro {
-  
-}
 
 .p1 {
   margin-left:auto;
   margin-right:auto;
+  padding:5px;
   text-align: center; 
-  background-color: #756dd6; 
-  border: black;
-  border-width: thick;
+  background-color: #756dd6;
+  border: black solid thin;
 }
 
 .img1 {
