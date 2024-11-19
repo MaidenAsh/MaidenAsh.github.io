@@ -25,6 +25,10 @@ h1, h2, p {
   text-align: center;
 }
 
+.img2 {
+  width:20%;
+}
+
 /*
 below is trying to get the gif and the text on the same line
 keep running into alignment issue, text aligned to bottom of
