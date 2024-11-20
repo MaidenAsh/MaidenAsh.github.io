@@ -26,8 +26,16 @@ h1, h2, p {
 }
 
 .img2 {
-  width:20%;
+  background-image: url(snow.gif);
+  text-align: center;
 }
+
+.cakeimg {
+  width:35%;
+  vertical-align:top;
+}
+
+
 
 /*
 below is trying to get the gif and the text on the same line
