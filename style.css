@@ -35,7 +35,20 @@ h1, h2, p {
   vertical-align:top;
 }
 
+div.scroll-container {
+  background-color: #003603;
+  overflow: auto;
+  white-space: nowrap;
+  padding: 10px;
+}
 
+div.scroll-container img {
+  width:350px;
+  height:350px;
+  vertical-align: top;
+  border: black solid thick;
+  margin: auto 3px;
+}
 
 /*
 below is trying to get the gif and the text on the same line
