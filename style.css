@@ -19,8 +19,8 @@ h1, h2, p {
 }
 
 .img1 {
-  margin-right: 50px;
-  margin-left: 50px;
+  /*margin-right: 50px;
+  margin-left: 50px;*/
   border: white solid thin;
   background-color: #002131;
   display:flex;
