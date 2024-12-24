@@ -709,7 +709,7 @@
             if (b.Value == "Joker") {
                 if (a.Magical == true) {
                     return false    
-                } else if (a.Magical == false) {
+                } else if (a.Magical == false || a.Value == "Joker") {
                     if (stack.findLastIndex((x) => x.Value != "Joker") != -1) {
                         return compareCards(a,stack.at(stack.findLastIndex((x) => x.Value != "Joker")))
                     } else if (stack.findLastIndex((x) => x.Value != "Joker") == -1) {
@@ -793,7 +793,7 @@
             ]
             document.getElementById("burnSFX").play()
             changeTurn()
-        }
+        }           
 
         function checkVictory() {
             if (downcard1.length == 0 && upcard1.length == 0 && handcard1.length == 0) {
@@ -952,4 +952,4 @@
 
     </script>
 </body>
-</html>
+</html> 
