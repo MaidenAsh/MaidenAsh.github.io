@@ -23,7 +23,7 @@
 </head> 
 <body onload="initGame()">
     <canvas id="shedCanvas" width="800" height="800"></canvas>
-    <!--Every card image is inside this div-->
+    <!--Every card image is inside this div element-->
     <div style="display:none;">
         <img id="spades2" src="images/spades2.png";/>
         <img id="spades3" src="images/spades3.png";/>
@@ -93,7 +93,7 @@
         <audio id="forfeitSFX"><source src="audio/forfeit.mp3"></audio>
         <audio id="victory"><source src="audio/victory.mp3"></audio>
         <audio id="defeat"><source src="audio/defeat.mp3"></audio> 
-    </div>  
+    </div>      
     <script>
         const canvas = document.getElementById('shedCanvas');
         const ctx = canvas.getContext('2d');
@@ -104,12 +104,14 @@
         let swapping;
         let p1 = false;
         let p2 = false;
-        let swappable = false;  // -able variables to enable buttons
+        // -able variables to enable buttons
+        let swappable = false;  
         let readyable = true;
         let playable = false;
         let forfeitable = false;
         let replayable = false;
-        let deck = [];
+        // Arrays for the places the cards can be
+        let deck = []; 
         let downcard1 = [];
         let downcard2 = []; 
         let upcard1 = [];
@@ -121,8 +123,16 @@
         let msg1 = "";  
         let msg2 = "";
 
-        canvas.addEventListener("click",selectCards);   
+        // Adjusting volume and speed of sound effects     
+        document.getElementById("bgMusic").volume = 0.15;
+        document.getElementById("bgMusic").loop = true;
+        document.getElementById("placeCard").playbackRate = 3.0;
+        document.getElementById("burnSFX").playbackRate = 1.25;
+        document.getElementById("forfeitSFX").playbackRate = 2.0;    
+        document.getElementById("forfeitSFX").volume = 0.75;
 
+        canvas.addEventListener("click",selectCards);   
+        
         function initGame() {
             gameRunning = true;     
             swapping = true;
@@ -132,13 +142,7 @@
             deal();                   
             draw();         
             sortHand();                 
-            renderCards();      
-            document.getElementById("bgMusic").volume = 0.2
-            document.getElementById("bgMusic").loop = true
-            document.getElementById("placeCard").playbackRate = 3.0  
-            document.getElementById("burnSFX").playbackRate = 1.25
-            document.getElementById("forfeitSFX").playbackRate = 2.0    
-            document.getElementById("forfeitSFX").volume = 0.75
+            renderCards(); 
         }                                                                              
 
         function createDeck(deck) {
@@ -174,7 +178,7 @@
         }
 
         function deal() {
-            // 3 downcards and 3 upcards to each player
+            // Deals 3 downcards and 3 upcards to each player
             while (downcard1.length<3) {
                 downcard1.push(deck.pop())
             }
@@ -190,14 +194,10 @@
         }
 
         function draw() {
-            // Draws until 3 cards in hand, as long as there's cards in the deck
-            if (deck.length == 0) {
-                return
-            }
+            // Draws until 3 cards in hand, as long as there's cards left in the deck
             while (handcard1.length<3 && deck.length != 0) {
                 handcard1.push(deck.pop())
             }                                   
-
             while (handcard2.length<3 && deck.length != 0) {
                 handcard2.push(deck.pop())
             }
@@ -263,6 +263,7 @@
                 handcard1[i].x1 = x
                 handcard1[i].x2 = x + 80
                 if (i > 0) {
+                    // Adjusts previous card's x2 co-ord if there's overlap
                     if (handcard1[i-1].x2 > x) {
                         handcard1[i-1].x2 = x-3
                     }
@@ -285,57 +286,56 @@
                 let x = i*interval + initial    
                 //let s = formString(handcard2[i])
                 ctx.drawImage(document.getElementById("blueBack"), x, 0, 80, 120)
-            }
+            }   
             // Deck
             for (let i = 0; i<deck.length; i++) {
-                let y = 340 - i/2;                                                            
+                let y = 340 - i*0.75;                                                            
                 ctx.drawImage(document.getElementById("redBack"), 300, y, 80, 120);
             }
             // Stack
             for (let i = 0; i<stack.length; i++) { 
                 let s = formString(stack[i])
-                let y = 340 - i/4;
+                let y = 340 - i*0.75;
                 ctx.drawImage(document.getElementById(s), 420, y, 80, 120);
             }
-            // Buttons
+            // Ready button
             if (gameRunning == true && swapping == true) {
                 readyable = true
                 drawReadyButton()
             } else {
                 readyable = false
             }
-
-
+            // Swap button
             if (gameRunning == true && swapping == true && selected.length == 2) {
                 swappable = true
                 drawSwapButton()
             } else {
                 swappable = false
             }
-
+            // Play button
             if (gameRunning == true && swapping == false && selected.length>0) {
                 playable = true
                 drawPlayButton()
             }   else {
                 playable = false
             }
-
+            // Forfeit button
             if (gameRunning == true && swapping == false && stack.length>0) {
                 forfeitable = true
                 drawForfeitButton()
             }   else {
                 forfeitable = false
             }
-
         }          
 
         function selectCards() {  
             // Handles all clicking, key function for the game loop
-            document.getElementById("bgMusic").play() 
             if (gameRunning == true) {
+                document.getElementById("bgMusic").play() 
                 // Initial swap phase
                 if (swapping == true && selected.length<=2) {
                     for (let i = 0; i<upcard1.length; i++) {
+                        // Only selects if no other upcards have been selected
                         if (event.offsetX > upcard1[i].x1 && event.offsetX < upcard1[i].x2
                             && event.offsetY > upcard1[i].y1 && event.offsetY < upcard1[i].y2) {
                                 if (upcard1[i].Selected == false &&     
@@ -346,10 +346,10 @@
                                     selected = selected.filter((card) => card != upcard1[i])
                                     upcard1[i].Selected = false
                                 }   
-                                    
                         } 
                     }   
                     for (let i = 0; i<handcard1.length; i++) {
+                        // Only selects if no other handcards have been selected
                         if (event.offsetX > handcard1[i].x1 && event.offsetX < handcard1[i].x2
                             && event.offsetY > handcard1[i].y1 && event.offsetY < handcard1[i].y2) {
                                 if (handcard1[i].Selected == false && 
@@ -383,7 +383,8 @@
                             swapping = false
                         }   
                     }
-                }   
+                    routine()
+                }          
                 // Main game phase
                 if (swapping == false && p1 == true) {
                     // When handcards are present
@@ -454,6 +455,7 @@
                         if (event.offsetX > 620 && event.offsetX < 740
                         && event.offsetY > 530 && event.offsetY < 610) {
                             playCards(1)
+                            const burnTO = setTimeout(checkBurn,900,1)
                         }   
                     }
                     // Forfeit button
@@ -463,48 +465,20 @@
                             forfeit(1)
                         }
                     }
-                }      
+                    routine()
+                    if (p2 == true || downcard1.length == 0) {
+                        const vicTO = setTimeout(checkVictory, 1000) // checkVictory also contains the cue for the bot to move  
+                    }
+                }   
             } else if (gameRunning == false) {
+                // After the player wins or loses
                 if (replayable == true) {
                     if (event.offsetX > 340 && event.offsetX < 460
                     && event.offsetY > 420 && event.offsetY < 500) {
-                        clear()
-                        p1 = false;
-                        p2 = false;
-                        swappable = false;  // -able variables to enable buttons
-                        readyable = true;
-                        playable = false;
-                        forfeitable = false;
-                        replayable = false;
-                        deck = [];
-                        downcard1 = [];
-                        downcard2 = []; 
-                        upcard1 = [];
-                        upcard2 = [];
-                        handcard1 = [];
-                        handcard2 = [];
-                        selected = []; // List of selected cards
-                        stack = []; // Stack of cards in center
-                        msg1 = "";
-                        msg2 = "";
-                        initGame()
+                        location.reload() // Reloads the document
                     }
                 }   
             }
-            clear();
-            if (msg1 != "") {
-               drawMessage(msg1,"left",1); 
-            }
-            if (msg2 != "") {
-               drawMessage(msg2,"right",2); 
-            }
-            draw();
-            sortHand();
-            renderCards();
-            checkVictory();
-            if (p2 == true && gameRunning == true) {
-                const myTimeout = setTimeout(botMove,3000)
-            }  
         }                   
 
         function sortHand() {
@@ -519,8 +493,8 @@
         }
 
         function swapCards() {
-            // Swaps cards during swap phase
-            if(selected.length == 2) {
+            // Swaps between handcards and upcards during swap phase
+            if (selected.length == 2) {
                 let hand = selected.filter((x) => handcard1.includes(x)).pop()
                 let up = selected.filter((x) => upcard1.includes(x)).pop()
                 cleanse()
@@ -528,11 +502,12 @@
                 up.Selected = false
                 handcard1.push(up)
                 upcard1.push(hand)
+                document.getElementById("placeCard").play()
             }       
         }
 
         function cleanse() {
-            // Removes selected cards from player's cards and empties selected array
+            // Removes selected cards from player's cards and empties 'selected' array
             handcard1 = handcard1.filter((card) => card.Selected != true)
             upcard1 = upcard1.filter((card) => card.Selected != true)
             downcard1 = downcard1.filter((card) => card.Selected != true)
@@ -673,10 +648,9 @@
             for (let i = 0; i<selected.length;i++) {
                 let mid = selected[i]
                 stack.push(mid)
-            }               
-
+            }   
             document.getElementById("placeCard").play()
-
+            // Creates message to display when cards are played
             let msgString = ""
             switch(selected.length) {
                 case 1:
@@ -694,16 +668,11 @@
             }
             if (x == 1) {
                 msg1 = msgString
-            } else if (x == 2) [
+            } else if (x == 2) {
                 msg2 = msgString
-            ]
-
-            changeTurn()
-
-            if (stack.at(-1).Value == 10) {
-                burn(x)
-            }  
-        }                   
+            }
+            cleanse()        
+        }                                  
 
         function compareCards(a,b) {
             // Compares the selected card(s), a, with the card in the stack, b
@@ -716,20 +685,20 @@
                     } else if (stack.findLastIndex((x) => x.Value != "Joker") == -1) {
                         return true 
                     }
-                }                   
+                }                       
             } else if (b.Value == "8") {
-                let index = stack.findLastIndex((x) => x.Value != "8")
-                if (index != -1) {  
+                let index = stack.findLastIndex((x) => x.Value != "8" && x.Value != "Joker")
+                if (index != -1) {      
                     return compareCards(a,stack.at(index))
                 } else if (index == -1) {
                     return true 
-                }           
+                }               
             } else if (b.Value == "7") {                
                 if (a.Magical == true || a.Value < 7) {
                     return true
                 } else {
                     return false
-                }           
+                }               
             } else {
                 if (a.Magical == true ||
                 values.findIndex((x) => x == a.Value) - values.findIndex((x) => x == b.Value) >= 0) {
@@ -739,19 +708,21 @@
                 }
             }
         }           
-
+            
         function playCards(x) {
+            // Determines whether the cards selected are valid to play and forfeits if not
             if (stack.length > 0) {
                 if (compareCards(selected[0],stack.at(-1))) {
                     transferToStack(x)
+                    changeTurn()    
                 } else {
-                    forfeit(x)
+                    transferToStack(x)
+                    forfeit(x) // Turn changing included in forfeit
                 }
             } else {
                 transferToStack(x)
+                changeTurn()    
             }
-            cleanse()
-            checkFourInRow(x)
         }
 
         function forfeit(x) {
@@ -772,55 +743,69 @@
                 }
             }   
             changeTurn()
-            clear() 
-            if (msg1 != "") {
-                drawMessage(msg1,"left",1); 
-            }
-            if (msg2 != "") {
-                drawMessage(msg2,"right",2); 
-            }   
-            draw();
-            sortHand(); 
+            routine();
             document.getElementById("forfeitSFX").play()
-            renderCards();  
         }                   
 
-        function burn(x) {       
+        function burn(x) {      
+            // Burns the stack and displays relevant message
             stack = []
             if (x == 1) {
                 msg1 = "burned the stack!"
-            } else if (x == 2) [
+            } else if (x == 2) {
                 msg2 = "burned the stack!"
-            ]
+                const myTimeout = setTimeout(botMove,1000)
+                const burnTO = setTimeout(checkBurn,2000,2)
+            }
             document.getElementById("burnSFX").play()
-            changeTurn()
-        }           
-
+            changeTurn() // Cancels out the turn change inside playCards
+        }                                       
+                                        
         function checkVictory() {
+            // Checks if the player won
             if (downcard1.length == 0 && upcard1.length == 0 && handcard1.length == 0) {
+                p1 = false
+                p2 = false
                 gameRunning = false
                 replayable = true
-                clear()             
+                clear() 
+                msg1 = ""            
+                msg2 = ""
                 ctx.font = "bold italics 100px Times New Roman"
-                ctx.fillText("You Win!", 400, 400)
+                ctx.fillText("You Win!", 400, 370)
                 drawReplayButton()
                 document.getElementById("bgMusic").load()
                 document.getElementById("victory").play()
             }
-
+            // Checks if the bot won
             if (downcard2.length == 0 && upcard2.length == 0 && handcard2.length == 0) {
+                p1 = false
+                p2 = false
                 gameRunning = false
                 replayable = true
                 clear()     
+                msg1 = ""            
+                msg2 = ""
                 ctx.font = "bold italics 100px Times New Roman"
-                ctx.fillText("You Lose!", 400, 400)
+                ctx.fillText("You Lose!", 400, 370)
                 drawReplayButton()
                 document.getElementById("bgMusic").load()
                 document.getElementById("defeat").play()
-            }
+            } 
+            // If neither have won yet, then the bot moves (as long as it is its turn)
+            if (p2 == true && gameRunning == true) {
+                const myTimeout = setTimeout(botMove,1100)
+                const burnTO = setTimeout(checkBurn,2000,2)
+            }                   
+
+            clearTimeout(vicTO)
         }   
 
-        function checkFourInRow(x) {
+        function checkBurn(x) {
+            // Burns if a 10 is played
+            if (stack.at(-1).Value == 10) {
+                burn(x)
+            }  
             // Burns if there's 4 cards in a row on the stack of the same value
             if (stack.length >= 4) {
                 if (stack.at(-4).Value == stack.at(-3).Value && 
@@ -829,10 +814,12 @@
                     burn(x)
                 }
             }
-        }
+            routine()
+            clearTimeout(burnTO)
+        }       
 
         function botMove() {
-            while (p2 == true) {
+            if (p2 == true) {
                 if (stack.length == 0) {
                     // Selects all cards with the same value as the lowest value card
                     if (handcard2.length > 0) {
@@ -888,22 +875,14 @@
                     }
                 }
                 playCards(2);
-            }
-            clear() 
-            if (msg1 != "") {
-                drawMessage(msg1,"left",1); 
-            }
-            if (msg2 != "") {
-                drawMessage(msg2,"right",2); 
-            }   
-            draw();
-            sortHand(); 
-            renderCards();  
-            checkVictory();        
+                routine();  
+                const vicTO = setTimeout(checkVictory, 2000)  
+            }    
             clearTimeout(myTimeout)
         }   
 
         function drawMessage(message,pos,player) {
+            // Draws message on the left or right for the player and bot respectively
             let x = pos == "left" ? 75 : 575
             let y = 350;
 
@@ -949,6 +928,20 @@
                 p1 = true
                 p2 = false
             }
+        }
+
+        function routine() {
+            // Series of functions that are used after each hand is played
+            clear();
+            if (msg1 != "") {
+               drawMessage(msg1,"left",1); 
+            }
+            if (msg2 != "") {
+               drawMessage(msg2,"right",2); 
+            }
+            draw();
+            sortHand(); 
+            renderCards();
         }
 
     </script>
