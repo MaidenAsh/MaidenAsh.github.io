@@ -55,12 +55,18 @@
                         ctx.stroke()
                     }
 
-                    
+                    function drawEarth() {
+                        ctx.beginPath()
+                        ctx.arc(width/2 + width/3,height/2,width/12,0,2*Math.PI)    
+                        ctx.fillStyle = "blue"
+                        ctx.fill()      
+                        ctx.stroke()
+                    }       
 
                     function draw() {
                         fix_dpi();
                         drawSun();
-                        
+                        drawEarth()
                         requestAnimationFrame(draw);
                     }
                     requestAnimationFrame(draw);
