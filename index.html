@@ -9,10 +9,6 @@
     </head>
 
     <body>
-
-        <header>    
-        </header>
-
         <main>
             <h1>Introduction to Me</h1>
             <article>
@@ -25,9 +21,53 @@
                     once I left, since the process of constant problem-solving appealed to me greatly.
                     </p>
                 </section>
-                <section class="img1">
-                    <img class="orbitimg" src="orbits.gif" alt="The solar system in action.">
+                <section>
+                    <canvas id="canvas"></canvas>
                 </section>
+                <script>
+                    const canvas = document.getElementById("canvas")
+                    const ctx = canvas.getContext('2d')
+
+                    let dpi = window.devicePixelRatio
+                    let width
+                    let height
+
+                    function fix_dpi() {        
+                        let style = {
+                            height() {
+                                return +getComputedStyle(canvas).getPropertyValue('width').slice(0,-2);
+                            },
+                            width() {
+                                return +getComputedStyle(canvas).getPropertyValue('width').slice(0,-2);
+                            }
+                        }
+                        canvas.setAttribute('width', style.width() * dpi);
+                        canvas.setAttribute('height', style.height() * dpi);
+                        width = canvas.width
+                        height = canvas.height
+                    }
+
+                    function drawSun() {
+                        ctx.beginPath()
+                        ctx.arc(width/2,height/2,width/13,0,2*Math.PI)
+                        ctx.fillStyle = "#FDB813"
+                        ctx.fill()
+                        ctx.stroke()
+                    }
+
+                    
+
+                    function draw() {
+                        fix_dpi();
+                        drawSun();
+                        
+                        requestAnimationFrame(draw);
+                    }
+                    requestAnimationFrame(draw);
+                </script>
+                <!-- <section class="img1">
+                    <img class="orbitimg" src="orbits.gif" alt="The solar system in action.">
+                </section> -->
                 <section class="cakes">
                     <p class="p1">
                     I like to bake cakes. Here's one I made for a Christmas party a few years back,

@@ -18,6 +18,15 @@ h1, h2, p {
   border: black solid thin;
 }
 
+canvas {
+  margin-right: 30%;
+  margin-left: 30%;
+  border: white solid thin;
+  background-color: #002131;
+  display: flex;
+  width: 40%;
+}
+
 .img1 {
   margin-right: 50px;
   margin-left: 50px;
@@ -39,7 +48,7 @@ h1, h2, p {
 }
 
 .cakeimg {
-  width:30%;
+  width:25%;
   vertical-align:top;
 }
 
@@ -58,23 +67,3 @@ div.scroll-container img {
   margin: auto 3px;
 }
 
-/*
-below is trying to get the gif and the text on the same line
-keep running into alignment issue, text aligned to bottom of
-gif instead of top
-.p1 {
-  background-color: red;
-  text-align: left;
-  width: 50%;
-  margin-right: 0;
-  display: inline-block;
-  
-}
-
-.img1 {
-  background-color: blue;
-  margin-left: 0;
-  width:50%;
-  
-}
-  */
