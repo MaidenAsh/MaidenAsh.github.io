@@ -52,3 +52,9 @@ div.scroll-container img {
   margin: auto 3px;
 }
 
+
+.construction {
+  display: block;
+  margin: auto;
+  width: 30%;
+}
